@@ -5,6 +5,9 @@
 ** Filename     : HttpClientTest.c
 ** Description  : 
 ** ******************************************************/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "HttpClient.h"
 
 #define GET_FILE "GET_FILE"
