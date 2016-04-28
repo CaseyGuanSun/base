@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	int ret = 0;
 	if(argc != 4)
 	{
-		printf("Please use like this:\n");
+		printf("Please use like this, argc:%d:\n", argc);
 		printf("HttpClientTest GET_FILE url filePath\n");
 		return 0;
 	}

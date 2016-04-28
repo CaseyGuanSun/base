@@ -11,13 +11,12 @@ all:HttpClientTest libHttpClient.a clean
 .c.o:
 	$(GCC) -c $< $(CFLAGS) $(INCLUDES)
 
-
 libHttpClient.a:$(OBJ_HTTPCLIENT)
 	ar rv $@ $(OBJ_HTTPCLIENT)
 	mv -f $@ $(BASELIB)
 
 HttpClientTest:$(OBJ_HTTPCLIENT)
-	$(GCC) -o HttpClientTest $^
+	$(GCC) -o HttpClientTest $^ -lcurl
 
 .PHONY:clean
 
