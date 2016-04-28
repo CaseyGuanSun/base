@@ -10,6 +10,7 @@
 
 int HttpPost(const char* strUrl, const char* strPost, char* strResponse);
 int HttpGet(const char* strUrl, char* strResponse);
+int HttpGetFile(const char* strUrl, const char* filePath);
 
 
 #endif

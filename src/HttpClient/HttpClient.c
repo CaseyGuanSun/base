@@ -52,6 +52,17 @@ static size_t OnWriteData(void* buffer, size_t size, size_t nmemb, void* lpVoid)
 	return nmemb;
 }
 
+static size_t OnSaveFile(void* ptr, size_t _size, size_t nmemb, void* userData)
+{
+	FILE* fp = (FILE*)userData;
+	if(!fp)
+	{
+		return 0;
+	}
+	size_t written = fwrite((FILE*)ptr, _size, nmemb, fp);
+	return written;
+}
+
 int HttpPost(const char* strUrl, const char* strPost, char* strResponse)
 {
 	CURLcode res;
@@ -109,4 +120,38 @@ int HttpGet(const char* strUrl, char* strResponse)
 
 }
 
+int HttpGetFile(const char* strUrl, const char* filePath)
+{
+	CURLcode res;
+	FILE* fp = fopen(filePath, "wb");
+	if(!fp)
+	{
+		//File can't be open
+		return -1;
+	}
+
+	CURL* curl = curl_easy_init();
+	if(NULL == curl)
+	{
+		return CURLE_FAILED_INIT;
+	}
+	if(m_bDebug)
+	{
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+		curl_easy_setopt(curl, CURLOPT_DEBUGFUNCTION, OnDebug);
+	}
+	curl_easy_setopt(curl, CURLOPT_URL, strUrl);
+	curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnSaveFile);
+
+	res = curl_easy_perform(curl);
+	if(res)
+	{
+		return res;
+	}
+	curl_easy_cleanup(curl);
+	fclose(fp);
+	return 0;
+}
 
